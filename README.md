@@ -3,7 +3,7 @@ The book can be found [here](https://learn-haskell.blog/).
 
 ## Progress
 - [x] 1. About this book
-- [ ] 2. Hello world
+- [x] 2. Hello world
 - [ ] 3. Building an HTML printer library
   - [ ] 3.1. Flexible HTML content (functions)
   - [ ] 3.2. Adding type signatures
