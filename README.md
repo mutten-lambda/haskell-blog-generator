@@ -9,8 +9,8 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 3.2. Adding type signatures
   - [x] 3.3. Embedded Domain Specific Languages
   - [x] 3.4. Safer HTML construction with types
-  - [ ] 3.5. Preventing incorrect use with modules
-  - [ ] 3.6. Escaping characters
+  - [x] 3.5. Preventing incorrect use with modules
+  - [x] 3.6. Escaping characters
   - [ ] 3.7. Exposing internal functionality (Internal modules)
   - [ ] 3.8. Exercises
   - [ ] 3.9. Summary
