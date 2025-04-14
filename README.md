@@ -5,7 +5,7 @@ The book can be found [here](https://learn-haskell.blog/).
 - [x] 1. About this book
 - [x] 2. Hello world
 - [ ] 3. Building an HTML printer library
-  - [ ] 3.1. Flexible HTML content (functions)
+  - [x] 3.1. Flexible HTML content (functions)
   - [ ] 3.2. Adding type signatures
   - [ ] 3.3. Embedded Domain Specific Languages
   - [ ] 3.4. Safer HTML construction with types
