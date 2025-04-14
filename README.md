@@ -11,7 +11,7 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 3.4. Safer HTML construction with types
   - [x] 3.5. Preventing incorrect use with modules
   - [x] 3.6. Escaping characters
-  - [ ] 3.7. Exposing internal functionality (Internal modules)
+  - [x] 3.7. Exposing internal functionality (Internal modules)
   - [ ] 3.8. Exercises
   - [ ] 3.9. Summary
 - [ ] 4. Custom markup language
