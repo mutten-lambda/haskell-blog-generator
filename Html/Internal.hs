@@ -21,8 +21,17 @@ html_ title content =
 p_ :: String -> Structure
 p_ = Structure . el "p" . escape
 
+pre_ :: String -> Structure
+pre_ = Structure . el "pre" . escape
+
 h1_ :: String -> Structure
 h1_ = Structure . el "h1" . escape
+
+ul_ :: [Structure] -> Structure
+ul_ = Structure . el "ul" . concatMap (el "li" . getStructureString) 
+
+ol_ :: [Structure] -> Structure
+ol_ = Structure . el "ol" . concatMap (el "li" . getStructureString) 
 
 el :: String -> String -> String
 el tag content =
