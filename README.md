@@ -4,7 +4,7 @@ The book can be found [here](https://learn-haskell.blog/).
 ## Progress
 - [x] 1. About this book
 - [x] 2. Hello world
-- [ ] 3. Building an HTML printer library
+- [x] 3. Building an HTML printer library
   - [x] 3.1. Flexible HTML content (functions)
   - [x] 3.2. Adding type signatures
   - [x] 3.3. Embedded Domain Specific Languages
@@ -13,7 +13,7 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 3.6. Escaping characters
   - [x] 3.7. Exposing internal functionality (Internal modules)
   - [x] 3.8. Exercises
-  - [ ] 3.9. Summary
+  - [x] 3.9. Summary
 - [ ] 4. Custom markup language
   - [ ] 4.1. Representing the markup language as a Haskell data type
   - [ ] 4.2. Parsing markup part 01 (Recursion)
