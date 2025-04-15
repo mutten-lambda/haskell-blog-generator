@@ -15,6 +15,7 @@ data Structure
   | UnorderedList [String]
   | OrderedList [String]
   | Codeblock [String]
+  deriving Show
 
 parse :: String -> Document
 parse = parseLines [] . lines

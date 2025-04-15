@@ -6,6 +6,10 @@ newtype Html
 newtype Structure
   = Structure String
 
+instance Semigroup Structure
+  where
+    (Structure a) <> (Structure b) = Structure $ a <> b
+
 type Title
   = String
 
