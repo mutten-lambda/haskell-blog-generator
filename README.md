@@ -15,7 +15,7 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 3.8. Exercises
   - [x] 3.9. Summary
 - [ ] 4. Custom markup language
-  - [ ] 4.1. Representing the markup language as a Haskell data type
+  - [x] 4.1. Representing the markup language as a Haskell data type
   - [ ] 4.2. Parsing markup part 01 (Recursion)
   - [ ] 4.3. Displaying the parsing results (type classes)
   - [ ] 4.4. Parsing markup part 02 (Pattern matching)
