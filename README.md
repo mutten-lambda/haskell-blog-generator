@@ -21,7 +21,7 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 4.4. Parsing markup part 02 (Pattern matching)
 - [ ] 5. Gluing things together
   - [x] 5.1. Converting Markup to HTML
-  - [ ] 5.2. Working with IO
+  - [x] 5.2. Working with IO
   - [ ] 5.3. Defining a project description
   - [ ] 5.4. Fancy options parsing
 - [ ] 6. Handling errors and multiple files
