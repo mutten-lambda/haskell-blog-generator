@@ -44,8 +44,12 @@ executable hs-blog-gen
   import: common-settings
   hs-source-dirs: app
   main-is: Main.hs
+  other-modules:
+    OptParse
   build-depends:
       base
+    , directory
+    , optparse-applicative
     , hs-blog
   ghc-options:
     -O
