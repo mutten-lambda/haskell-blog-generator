@@ -16,8 +16,8 @@ import Options.Applicative
 
 -- | Model
 data Options
-  = ConvertSingle SingleInput SingleOutput
-  | ConvertDir FilePath FilePath
+  = ConvertSingle SingleInput SingleOutput ReplaceFlag
+  | ConvertDir FilePath FilePath ReplaceFlag
   deriving Show
 
 -- | A single input source
@@ -31,6 +31,8 @@ data SingleOutput
   = Stdout
   | OutputFile FilePath
   deriving Show
+
+type ReplaceFlag = Bool
 
 ------------------------------------------------
 -- * Parser
@@ -71,7 +73,7 @@ pOptions =
 -- | Parser for single source to sink option
 pConvertSingle :: Parser Options
 pConvertSingle =
-  ConvertSingle <$> pSingleInput <*> pSingleOutput
+  ConvertSingle <$> pSingleInput <*> pSingleOutput <*> pReplace
 
 -- | Parser for single input source
 pSingleInput :: Parser SingleInput
@@ -112,7 +114,7 @@ pOutputFile = OutputFile <$> parser
 
 pConvertDir :: Parser Options
 pConvertDir =
-  ConvertDir <$> pInputDir <*> pOutputDir
+  ConvertDir <$> pInputDir <*> pOutputDir <*> pReplace
 
 -- | Parser for input directory
 pInputDir :: Parser FilePath
@@ -132,4 +134,15 @@ pOutputDir =
       <> short 'o'
       <> metavar "DIRECTORY"
       <> help "Output directory"
+    )
+
+------------------------------------------------
+-- * Replace flag parser
+
+pReplace :: Parser Bool
+pReplace = 
+  switch 
+    ( long "replace"
+      <> short 'r'
+      <> help "Replace existing files"
     )
