@@ -8,7 +8,11 @@ module HsBlog.Html
   , ul_
   , ol_
   , pre_
-  , (<>)
+  , Content
+  , txt_
+  , img_
+  , b_
+  , i_
   , render
   )
   where

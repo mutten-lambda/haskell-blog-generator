@@ -8,12 +8,8 @@ newtype Html
 newtype Structure
   = Structure String
 
-instance Semigroup Structure
-  where
-    (Structure a) <> (Structure b) = Structure $ a <> b
-
-instance Monoid Structure where
-  mempty = empty_
+newtype Content
+  = Content String
 
 type Title
   = String
@@ -27,14 +23,23 @@ html_ title content =
       )
     )
 
-p_ :: String -> Structure
-p_ = Structure . el "p" . escape
+-- * Structure
+
+instance Semigroup Structure
+  where
+    (Structure a) <> (Structure b) = Structure $ a <> b
+
+instance Monoid Structure where
+  mempty = Structure mempty
+
+p_ :: Content -> Structure
+p_ = Structure . el "p" . getContentString
 
 pre_ :: String -> Structure
 pre_ = Structure . el "pre" . escape
 
-h_ :: Natural -> String -> Structure
-h_ n = Structure . el ("h" <> show n) . escape
+h_ :: Natural -> Content -> Structure
+h_ n = Structure . el ("h" <> show n) . getContentString
 
 ul_ :: [Structure] -> Structure
 ul_ = Structure . el "ul" . concatMap (el "li" . getStructureString) 
@@ -42,26 +47,46 @@ ul_ = Structure . el "ul" . concatMap (el "li" . getStructureString)
 ol_ :: [Structure] -> Structure
 ol_ = Structure . el "ol" . concatMap (el "li" . getStructureString) 
 
-el :: String -> String -> String
-el tag content =
-  "<" <> tag <> ">" <> content <> "</" <> tag <> ">"
+-- * Content
 
-append_ :: Structure -> Structure -> Structure
-append_ c1 c2 =
-  Structure (getStructureString c1 <> getStructureString c2)
+instance Semigroup Content
+  where
+    (Content a) <> (Content b) = Content $ a <> b
 
-empty_ :: Structure
-empty_ = Structure ""
+instance Monoid Content where
+  mempty = Content mempty
+
+txt_ :: String -> Content
+txt_ = Content . escape
+
+link_ :: FilePath -> Content -> Content
+link_ path content =
+  Content $
+    elAttr
+      "a"
+      ("href=\"" <> escape path <> "\"")
+      (getContentString content)
+
+img_ :: FilePath -> Content
+img_ path =
+  Content $ "<img src=\"" <> escape path <> "\">"
+
+b_ :: Content -> Content
+b_ content =
+  Content $ el "b" (getContentString content)
+
+i_ :: Content -> Content
+i_ content =
+  Content $ el "i" (getContentString content)
 
 getStructureString :: Structure -> String
-getStructureString content =
-  case content of
-    Structure str -> str
+getStructureString (Structure str) = str
+
+getContentString :: Content -> String
+getContentString (Content str) = str
 
 render :: Html -> String
-render html =
-  case html of
-    Html str -> str
+render (Html str) = str
 
 escape :: String -> String
 escape =
@@ -77,3 +102,10 @@ escape =
   in
     concatMap escapeChar
 
+el :: String -> String -> String
+el tag content =
+  "<" <> tag <> ">" <> content <> "</" <> tag <> ">"
+
+elAttr :: String -> String -> String -> String
+elAttr tag attrs content =
+  "<" <> tag <> " " <> attrs <> ">" <> content <> "</" <> tag <> ">"
