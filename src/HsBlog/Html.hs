@@ -9,6 +9,7 @@ module HsBlog.Html
   , ol_
   , pre_
   , Content
+  , link_
   , txt_
   , img_
   , b_

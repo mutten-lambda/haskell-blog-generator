@@ -24,10 +24,10 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 5.2. Working with IO
   - [x] 5.3. Defining a project description
   - [x] 5.4. Fancy options parsing
-- [ ] 6. Handling errors and multiple files
-  - [ ] 6.1. Handling errors with Either
-  - [ ] 6.2. Either with IO?
-  - [ ] 6.3. Exceptions
+- [x] 6. Handling errors and multiple files
+  - [x] 6.1. Handling errors with Either
+  - [x] 6.2. Either with IO?
+  - [x] 6.3. Exceptions
   - [ ] 6.4. Let's code already!
   - [ ] 6.5. Summary
 - [ ] 7. Passing an environment

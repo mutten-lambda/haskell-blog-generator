@@ -15,26 +15,34 @@ main = do
     ConvertDir input output replace ->
       HsBlog.convertDirectory input output
 
-    ConvertSingle input output replace -> do
-      (title, inputHandle) <-
-        case input of
-          Stdin -> pure ("", stdin)
-          InputFile file -> (,) file <$> openFile file ReadMode
-      outputHandle <-
-        case output of
-          Stdout -> pure stdout
-          OutputFile file -> do
-            exists <- doesFileExist file
-            shouldOpenFile <-
-              if exists && not replace
-              then confirm
-              else pure True
-            if shouldOpenFile
-            then openFile file WriteMode
-            else exitFailure
-      HsBlog.convertSingle title inputHandle outputHandle
-      hClose inputHandle
-      hClose outputHandle
+    ConvertSingle input output replace ->
+      let
+        withInputHandle :: (String -> Handle -> IO a) -> IO a
+        withInputHandle action =
+          case input of
+            Stdin ->
+              action "" stdin
+            InputFile file ->
+              withFile file ReadMode (action file)
+
+        withOutputHandle :: (Handle -> IO a) -> IO a
+        withOutputHandle action =
+          case output of
+            Stdout ->
+              action stdout
+            OutputFile file -> do
+              exists <- doesFileExist file
+              shouldOpenFile <-
+                if exists && not replace
+                  then confirm
+                  else pure True
+              if shouldOpenFile
+                then
+                  withFile file WriteMode action
+                else
+                  exitFailure
+      in
+        withInputHandle (\title -> withOutputHandle . HsBlog.convertSingle title)
 
 confirm :: IO Bool
 confirm = do
