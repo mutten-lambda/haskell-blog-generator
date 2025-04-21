@@ -11,9 +11,8 @@ main :: IO ()
 main = do
   options <- parse
   case options of
-    -- TODO take flag into account
     ConvertDir input output replace ->
-      HsBlog.convertDirectory input output
+      HsBlog.convertDirectory replace input output
 
     ConvertSingle input output replace ->
       let
@@ -44,6 +43,7 @@ main = do
       in
         withInputHandle (\title -> withOutputHandle . HsBlog.convertSingle title)
 
+-- TODO code duplication; see HsBlog.Directory
 confirm :: IO Bool
 confirm = do
   putStrLn "Are you sure? (y/n)"

@@ -28,7 +28,7 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 6.1. Handling errors with Either
   - [x] 6.2. Either with IO?
   - [x] 6.3. Exceptions
-  - [ ] 6.4. Let's code already!
+  - [x] 6.4. Let's code already!
   - [ ] 6.5. Summary
 - [ ] 7. Passing an environment
 - [ ] 8. Writing tests
