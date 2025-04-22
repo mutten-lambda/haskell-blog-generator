@@ -4,8 +4,20 @@ import qualified HsBlog.Markup as Markup
 import qualified HsBlog.Html as Html
 import HsBlog.Env
 
-convert :: Env -> Markup.Document -> Html.Html
-convert env = Html.html_ (eBlogName env) . foldMap convertStructure
+convert :: Env -> String -> Markup.Document -> Html.Html
+convert env title doc = 
+  let
+    header = 
+      Html.title_ (eBlogName env <> " - " <> title) 
+        <> Html.stylesheet_ (eStylesheetPath env)
+    article =
+      foldMap convertStructure doc 
+    fullTitle =
+      Html.h_ 1 (Html.link_ "index.html" . Html.txt_ $ eBlogName env)
+    body =
+      fullTitle <> article
+  in 
+    Html.html_ header body
 
 convertStructure :: Markup.Structure -> Html.Structure
 convertStructure structure =

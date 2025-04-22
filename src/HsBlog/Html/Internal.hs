@@ -1,6 +1,7 @@
 module HsBlog.Html.Internal where
 
 import GHC.Natural (Natural)
+import Prelude hiding (head)
 
 newtype Html
   = Html String
@@ -11,17 +12,17 @@ newtype Structure
 newtype Content
   = Content String
 
+newtype Head
+  = Head String
+
 type Title
   = String
 
-html_ :: Title -> Structure -> Html
-html_ title content =
+html_ :: Head -> Structure -> Html
+html_ (Head head) (Structure content) =
   Html
-    ( el "html"
-      ( el "head" (el "title" . escape $ title)
-        <> el "body" (getStructureString content)
-      )
-    )
+  . el "html"
+  $ el "head" head <> el "body" content
 
 -- * Structure
 
@@ -78,6 +79,26 @@ b_ content =
 i_ :: Content -> Content
 i_ content =
   Content $ el "i" (getContentString content)
+
+-- * Head
+
+instance Semigroup Head where
+  (<>) (Head h1) (Head h2) =
+    Head (h1 <> h2)
+
+instance Monoid Head where
+  mempty = Head mempty 
+
+title_ :: String -> Head
+title_ = Head . el "title" . escape
+
+stylesheet_ :: FilePath -> Head
+stylesheet_ path =
+  Head $ "<link rel=\"stylesheet\" type=\"text/css\" href=\"" <> escape path <> "\">"
+
+meta_ :: String -> String -> Head
+meta_ name content =
+  Head $ "<meta name=\"" <> escape name <> "\" content=\"" <> escape content <> "\">"
 
 getStructureString :: Structure -> String
 getStructureString (Structure str) = str

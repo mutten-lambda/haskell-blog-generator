@@ -6,7 +6,7 @@ module HsBlog.Directory
 
 import qualified HsBlog.Markup as Markup
 import qualified HsBlog.Html.Internal as Html
-    ( Html, html_, p_, h_, txt_, link_, render )
+    ( Html, html_, p_, h_, txt_, link_, render, title_, stylesheet_ )
 import HsBlog.Convert (convert, convertStructure)
 
 import Data.List (partition)
@@ -111,7 +111,7 @@ toOutputMarkupFile :: (FilePath, String) -> (FilePath, Markup.Document)
 toOutputMarkupFile (path, str) = (takeBaseName path <.> "html", Markup.parse str)
 
 convertFile :: Env -> (FilePath, Markup.Document) -> (FilePath, Html.Html)
-convertFile env (path, content) = (path , convert env content)
+convertFile env (path, content) = (path, convert env path content)
 
 buildIndex :: Env -> [(FilePath, Markup.Document)] -> Html.Html
 buildIndex env files =
@@ -130,7 +130,9 @@ buildIndex env files =
         files
   in
     Html.html_
-      (eBlogName env)
+      ( Html.title_ (eBlogName env)
+        <> Html.stylesheet_ (eStylesheetPath env)
+      )
       ( Html.h_ 1 (Html.link_ "index.html" (Html.txt_ "Blog"))
         <> Html.h_ 2 (Html.txt_ "Posts")
         <> mconcat previews

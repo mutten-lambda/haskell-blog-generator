@@ -13,11 +13,11 @@ import HsBlog.Directory
 import System.IO ( Handle, hGetContents, hPutStrLn )
 import HsBlog.Env
 
-convertSingle :: Env -> Handle -> Handle -> IO ()
-convertSingle env input output = do
+convertSingle :: String -> Handle -> Handle -> IO ()
+convertSingle title input output = do
   content <- hGetContents input
-  hPutStrLn output (process env content)
+  hPutStrLn output (process title content)
 
-process :: Env -> String -> String
-process env = Html.render . convert env . Markup.parse
+process :: String -> String -> String
+process title = Html.render . convert defaultEnv title . Markup.parse
 
