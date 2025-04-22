@@ -10,6 +10,7 @@ module OptParse
 
 import Data.Maybe (fromMaybe)
 import Options.Applicative
+import HsBlog.Env (Env(..), defaultEnv)
 
 ------------------------------------------------
 -- * Our command-line options model
@@ -17,7 +18,7 @@ import Options.Applicative
 -- | Model
 data Options
   = ConvertSingle SingleInput SingleOutput ReplaceFlag
-  | ConvertDir FilePath FilePath ReplaceFlag
+  | ConvertDir FilePath FilePath ReplaceFlag Env
   deriving Show
 
 -- | A single input source
@@ -114,7 +115,7 @@ pOutputFile = OutputFile <$> parser
 
 pConvertDir :: Parser Options
 pConvertDir =
-  ConvertDir <$> pInputDir <*> pOutputDir <*> pReplace
+  ConvertDir <$> pInputDir <*> pOutputDir <*> pReplace <*> pEnv
 
 -- | Parser for input directory
 pInputDir :: Parser FilePath
@@ -145,4 +146,32 @@ pReplace =
     ( long "replace"
       <> short 'r'
       <> help "Replace existing files"
+    )
+
+------------------------------------------------
+-- * Environment parser
+
+pEnv :: Parser Env
+pEnv = Env <$> pBlogName <*> pStylesheet
+
+pBlogName :: Parser String
+pBlogName =  
+  strOption
+    ( long "name"
+      <> short 'n'
+      <> metavar "STRING"
+      <> help "Blog name"
+      <> value (eBlogName defaultEnv)
+      <> showDefault
+    )
+
+pStylesheet :: Parser String
+pStylesheet =
+  strOption
+    ( long "style"
+      <> short 's'
+      <> metavar "FILE"
+      <> help "Stylesheet filename"
+      <> value (eStylesheetPath defaultEnv)
+      <> showDefault
     )

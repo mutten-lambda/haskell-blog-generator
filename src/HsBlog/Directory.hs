@@ -11,7 +11,7 @@ import HsBlog.Convert (convert, convertStructure)
 
 import Data.List (partition)
 import Data.Traversable (for)
-import Control.Monad (void, when)
+import Control.Monad.Reader 
 
 import System.IO (hPutStrLn, stderr)
 import Control.Exception (catch, displayException, SomeException (..))
@@ -37,7 +37,7 @@ convertDirectory env replace inputDir outputDir = do
   DirContents filesToProcess filesToCopy <- getDirFilesAndContent inputDir
   createOutputDirectoryOrExit replace outputDir
   let
-    outputHtmls = txtsToRenderedHtml env filesToProcess
+    outputHtmls = runReader (txtsToRenderedHtml filesToProcess) env
   copyFiles outputDir filesToCopy
   writeFiles outputDir outputHtmls
   putStrLn "Done."
@@ -98,23 +98,25 @@ createOutputDirectory replace dir = do
   when create (createDirectory dir)
   pure create
 
-txtsToRenderedHtml :: Env -> [(FilePath, String)] -> [(FilePath, String)]
-txtsToRenderedHtml env txts = 
+txtsToRenderedHtml :: [(FilePath, String)] -> Reader Env [(FilePath, String)]
+txtsToRenderedHtml txts = do
   let
     markup = map toOutputMarkupFile txts
-    index = ("index", buildIndex defaultEnv markup)
-    htmlContent = map (convertFile env) markup
-  in 
-    map (fmap Html.render) (index : htmlContent)
+  htmlContent <- traverse convertFile markup
+  index <- (,) "index" <$> buildIndex markup
+  return $ map (fmap Html.render) (index : htmlContent)
 
 toOutputMarkupFile :: (FilePath, String) -> (FilePath, Markup.Document)
 toOutputMarkupFile (path, str) = (takeBaseName path <.> "html", Markup.parse str)
 
-convertFile :: Env -> (FilePath, Markup.Document) -> (FilePath, Html.Html)
-convertFile env (path, content) = (path, convert env path content)
+convertFile :: (FilePath, Markup.Document) -> Reader Env (FilePath, Html.Html)
+convertFile (path, content) = do
+  env <- ask
+  return (path, convert env (takeBaseName path) content)
 
-buildIndex :: Env -> [(FilePath, Markup.Document)] -> Html.Html
-buildIndex env files =
+buildIndex :: [(FilePath, Markup.Document)] -> Reader Env Html.Html
+buildIndex files = do
+  env <- ask
   let
     previews =
       map
@@ -128,8 +130,7 @@ buildIndex env files =
               Html.h_ 3 (Html.link_ file (Html.txt_ file))
         )
         files
-  in
-    Html.html_
+  return $ Html.html_
       ( Html.title_ (eBlogName env)
         <> Html.stylesheet_ (eStylesheetPath env)
       )

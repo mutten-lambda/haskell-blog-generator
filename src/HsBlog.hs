@@ -11,7 +11,7 @@ import HsBlog.Convert (convert)
 import HsBlog.Directory
 
 import System.IO ( Handle, hGetContents, hPutStrLn )
-import HsBlog.Env
+import HsBlog.Env (defaultEnv)
 
 convertSingle :: String -> Handle -> Handle -> IO ()
 convertSingle title input output = do

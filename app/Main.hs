@@ -6,14 +6,12 @@ import qualified HsBlog
 import System.Exit ( exitFailure )
 import System.Directory ( doesFileExist )
 import System.IO
-import HsBlog.Env (defaultEnv)
 
 main :: IO ()
 main = do
   options <- parse
-  let env = defaultEnv 
   case options of
-    ConvertDir input output replace ->
+    ConvertDir input output replace env ->
       HsBlog.convertDirectory env replace input output
 
     ConvertSingle input output replace -> do
