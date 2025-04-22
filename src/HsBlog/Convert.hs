@@ -2,9 +2,10 @@ module HsBlog.Convert where
 
 import qualified HsBlog.Markup as Markup
 import qualified HsBlog.Html as Html
+import HsBlog.Env
 
-convert :: Html.Title -> Markup.Document -> Html.Html
-convert title = Html.html_ title . foldMap convertStructure
+convert :: Env -> Markup.Document -> Html.Html
+convert env = Html.html_ (eBlogName env) . foldMap convertStructure
 
 convertStructure :: Markup.Structure -> Html.Structure
 convertStructure structure =

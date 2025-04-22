@@ -30,13 +30,14 @@ import System.Directory
   , doesDirectoryExist
   , copyFile
   )
+import HsBlog.Env
 
-convertDirectory :: Bool -> FilePath -> FilePath -> IO ()
-convertDirectory replace inputDir outputDir = do
+convertDirectory :: Env -> Bool -> FilePath -> FilePath -> IO ()
+convertDirectory env replace inputDir outputDir = do
   DirContents filesToProcess filesToCopy <- getDirFilesAndContent inputDir
   createOutputDirectoryOrExit replace outputDir
   let
-    outputHtmls = txtsToRenderedHtml filesToProcess
+    outputHtmls = txtsToRenderedHtml env filesToProcess
   copyFiles outputDir filesToCopy
   writeFiles outputDir outputHtmls
   putStrLn "Done."
@@ -97,23 +98,23 @@ createOutputDirectory replace dir = do
   when create (createDirectory dir)
   pure create
 
-txtsToRenderedHtml :: [(FilePath, String)] -> [(FilePath, String)]
-txtsToRenderedHtml txts = 
+txtsToRenderedHtml :: Env -> [(FilePath, String)] -> [(FilePath, String)]
+txtsToRenderedHtml env txts = 
   let
     markup = map toOutputMarkupFile txts
-    index = ("index", buildIndex markup)
-    htmlContent = map convertFile markup
+    index = ("index", buildIndex defaultEnv markup)
+    htmlContent = map (convertFile env) markup
   in 
     map (fmap Html.render) (index : htmlContent)
 
 toOutputMarkupFile :: (FilePath, String) -> (FilePath, Markup.Document)
 toOutputMarkupFile (path, str) = (takeBaseName path <.> "html", Markup.parse str)
 
-convertFile :: (FilePath, Markup.Document) -> (FilePath, Html.Html)
-convertFile (path, content) = (path , convert path content)
+convertFile :: Env -> (FilePath, Markup.Document) -> (FilePath, Html.Html)
+convertFile env (path, content) = (path , convert env content)
 
-buildIndex :: [(FilePath, Markup.Document)] -> Html.Html
-buildIndex files =
+buildIndex :: Env -> [(FilePath, Markup.Document)] -> Html.Html
+buildIndex env files =
   let
     previews =
       map
@@ -129,7 +130,7 @@ buildIndex files =
         files
   in
     Html.html_
-      "Blog"
+      (eBlogName env)
       ( Html.h_ 1 (Html.link_ "index.html" (Html.txt_ "Blog"))
         <> Html.h_ 2 (Html.txt_ "Posts")
         <> mconcat previews

@@ -6,23 +6,25 @@ import qualified HsBlog
 import System.Exit ( exitFailure )
 import System.Directory ( doesFileExist )
 import System.IO
+import HsBlog.Env (defaultEnv)
 
 main :: IO ()
 main = do
   options <- parse
+  let env = defaultEnv 
   case options of
     ConvertDir input output replace ->
-      HsBlog.convertDirectory replace input output
+      HsBlog.convertDirectory env replace input output
 
     ConvertSingle input output replace ->
       let
-        withInputHandle :: (String -> Handle -> IO a) -> IO a
+        withInputHandle :: (Handle -> IO a) -> IO a
         withInputHandle action =
           case input of
             Stdin ->
-              action "" stdin
+              action stdin
             InputFile file ->
-              withFile file ReadMode (action file)
+              withFile file ReadMode action
 
         withOutputHandle :: (Handle -> IO a) -> IO a
         withOutputHandle action =
@@ -41,7 +43,7 @@ main = do
                 else
                   exitFailure
       in
-        withInputHandle (\title -> withOutputHandle . HsBlog.convertSingle title)
+        withInputHandle $ withOutputHandle . HsBlog.convertSingle env
 
 -- TODO code duplication; see HsBlog.Directory
 confirm :: IO Bool
