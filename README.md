@@ -31,6 +31,6 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 6.4. Let's code already!
   - [x] 6.5. Summary
 - [x] 7. Passing an environment
-- [ ] 8. Writing tests
+- [x] 8. Writing tests
 - [ ] 9. Generating documentation
 - [ ] 10. Recap
