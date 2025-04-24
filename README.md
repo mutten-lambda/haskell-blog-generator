@@ -32,5 +32,5 @@ The book can be found [here](https://learn-haskell.blog/).
   - [x] 6.5. Summary
 - [x] 7. Passing an environment
 - [x] 8. Writing tests
-- [ ] 9. Generating documentation
-- [ ] 10. Recap
+- [x] 9. Generating documentation
+- [x] 10. Recap
