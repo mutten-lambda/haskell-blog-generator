@@ -5,7 +5,7 @@ version:             0.1.0.0
 synopsis:            A custom blog generator from markup files
 description:         This package provides a static blog generator 
                      from a custom markup format to HTML.
-                     It defines a arser for this custom markup format
+                     It defines a parser for this custom markup format
                      as well as an html pretty printer EDSL.
 
                      It is a clone of the example project of the

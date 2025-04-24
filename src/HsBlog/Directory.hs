@@ -32,6 +32,8 @@ import System.Directory
   )
 import HsBlog.Env
 
+-- | Convert a directory of files in the custom markup language to rendered html files.
+-- Non-text files are simply copied over.
 convertDirectory :: Env -> Bool -> FilePath -> FilePath -> IO ()
 convertDirectory env replace inputDir outputDir = do
   DirContents filesToProcess filesToCopy <- getDirFilesAndContent inputDir

@@ -18,6 +18,9 @@ newtype Head
 type Title
   = String
 
+-- * HTML EDSL
+
+-- | Construct an HTML page from a `Head` and a `Structure`.
 html_ :: Head -> Structure -> Html
 html_ (Head head) (Structure content) =
   Html
